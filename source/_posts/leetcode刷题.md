@@ -1099,3 +1099,327 @@ var getIntersectionNode = function(headA, headB) {
 };
 ```
 
+# 二十天
+
+#### [209. 长度最小的子数组](https://leetcode-cn.com/problems/minimum-size-subarray-sum/)
+
+给定一个含有 n 个正整数的数组和一个正整数 target 。
+
+找出该数组中满足其和 ≥ target 的长度最小的 连续子数组 [numsl, numsl+1, ..., numsr-1, numsr] ，并返回其长度。如果不存在符合条件的子数组，返回 0 。
+
+ **示例：**
+
+```js
+输入：target = 7, nums = [2,3,1,2,4,3]
+输出：2
+解释：子数组 [4,3] 是该条件下的长度最小的子数组。
+输入：target = 11, nums = [1,1,1,1,1,1,1,1]
+输出：0
+```
+
+```js
+// 暴力法： 直接遍历每个下标
+var minSubArrayLen = function(target, nums) {
+    let res = Number.MAX_VALUE;
+    for (let i = 0; i < nums.length; i++) {
+        let sum = 0;
+        for (let j = i; j < nums.length; j++) {
+            sum += nums[j];
+            if (sum >= target) {
+                res = Math.min(res, j - i + 1);
+            }
+        }
+    }
+    return res == Number.MAX_VALUE ? 0 : res;
+};
+// 滑动数组 找到一个满足条件的数组 然后缩短它的边界
+var minSubArrayLen = function(target, nums) {
+    let n = nums.length;
+    if (n == 0) return 0;
+    let ans = Number.MAX_VALUE;
+    let start = 0, end = 0, sum = 0;
+    while (end < n) {
+        sum += nums[end];
+        while (sum >= target) {
+            ans = Math.min(ans, end- start + 1);
+            sum -= nums[start];
+            start++;
+        }
+        end++;
+    }
+    return ans == Number.MAX_VALUE ? 0 : ans;
+};
+```
+
+#### [155. 最小栈](https://leetcode-cn.com/problems/min-stack/)
+
+设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+
+push(x) —— 将元素 x 推入栈中。
+pop() —— 删除栈顶的元素。
+top() —— 获取栈顶元素。
+getMin() —— 检索栈中的最小元素。
+
+**示例：**
+
+```js
+输入：
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+输出：
+[null,null,null,null,-3,null,0,-2]
+
+解释：
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --> 返回 -3.
+minStack.pop();
+minStack.top();      --> 返回 0.
+minStack.getMin();   --> 返回 -2.
+```
+
+```js
+// 辅助栈 另一个栈来存最小的
+
+var MinStack = function() {
+    this.res = [];
+    this.min = [Number.MAX_VALUE];
+};
+
+/** 
+ * @param {number} val
+ * @return {void}
+ */
+MinStack.prototype.push = function(val) {
+    const item = this.min[this.min.length - 1];
+    if (item > val) {
+        this.min.push(val);
+    } else {
+        this.min.push(item);
+    }
+    this.res.push(val);
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+    this.res.pop();
+    this.min.pop();
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+    return this.res[this.res.length - 1];
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function() {
+    return this.min[this.min.length - 1];
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(val)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
+
+// 不用额外的空间，栈中存的进栈值与最小值的差值 
+var MinStack = function() {
+    this.min = Number.MAX_VALUE;
+    this.res = [];
+};
+
+/** 
+ * @param {number} val
+ * @return {void}
+ */
+MinStack.prototype.push = function(val) {
+    const minV = this.min;
+    if (val < minV) {
+        // 更新最小值
+        this.min = val;
+    }
+    // 保存最小值
+    this.res.push(val - minV);
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+    const item = this.res.pop();
+    // 如果最栈顶的值是大于0，则不会影响最小值，如果大于0 ，最小值 - 减去差值
+    if (item < 0) {
+        this.min = this.min - item;
+    }  // 返回差值+最小值
+    return item + this.min;
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+    const lastValue = this.res[this.res.length - 1];
+    // 如果栈顶小于0，则返回最小值
+    return lastValue > 0 ? this.min + lastValue : this.min;
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function() {
+    return this.min;
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(val)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
+```
+
+# 二十一天
+
+#### [ K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
+给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+
+k 是一个正整数，它的值小于或等于链表的长度。
+
+如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+
+进阶：
+
+你可以设计一个只使用常数额外空间的算法来解决此问题吗？
+你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
+
+```js
+// 将k个一组的反转链表的问题分解为n个反转链表的子问题
+var reverseKGroup = function(head, k) {
+    // 反转链表函数
+    var reversList = function(a, b) {
+        // 反转区间a, b上的节点
+       
+        let pre, cur, nxt;
+        pre = null;
+        cur = a; //用于循环
+        nxt = a;
+        // 进行的操作是每次循环将cur->pre, 注意b的方向没有改变
+        while (cur != b) {
+            // 保存a的下一个的值next
+            nxt = cur.next;
+            // 将cur指向上一个值的pre（反转指向）
+            cur.next = pre;
+            // 将pre 赋予当前值，当做下次循环的pre
+            pre = cur;
+            cur = nxt;
+        }
+        // pre 相当于 从后遍历到头，所有循环结束后，pre指向头节点
+        
+        return pre;
+    }
+    if (!head) {
+        return null;
+    }
+    let a = head;
+    let b = head;
+    // 判断区间a,b可以分为多少个长度为k的子区间
+    for (let i = 0; i < k; i++) {
+        // 剩余的节点不足k个，反转结束
+        if (b == null) {
+            return head;
+        } else {
+            b = b.next;
+        }
+        
+    }
+    // 反转前k个元素
+        let newHead = reversList(a, b);
+        a.next = reverseKGroup(b, k);
+        return newHead;
+};
+```
+
+# 二十二天
+
+#### [ 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
+
+给定一个包含非负整数的 `*m* x *n*` 网格 `grid` ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+
+**说明：**每次只能向下或者向右移动一步。
+
+**示例**
+
+![](/gallery/minimun-path-sum.png)
+
+```js
+输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
+输出：7
+解释：因为路径 1→3→1→1→1 的总和最小。
+```
+
+```js
+// 简单的一道dp题 和之前走楼梯的思路差不多，不过这里dp[i][j]存的是从左或者从上来的最小值加上本身的数字
+
+// dp[i][j] 表示到达i, j 所走的最短路径
+ // dp[i][j] = Math.min(dp[i - 1][j], grid[i][j] ) +  + dp[i][j - 1]
+var minPathSum = function(grid) {
+    if (grid == null || grid.length == null || grid[0].length == null) return 0;
+    let m = grid.length, n = grid[0].length;
+    let dp = new Array(m).fill(0).map(item => new Array(n).fill(0));
+    dp[0][0] = grid[0][0];
+    for (let i = 1; i < n; i++) {
+        dp[0][i] =  grid[0][i] + dp[0][i - 1];
+    }
+    for (let j = 1; j < m; j++) {
+        dp[j][0] = grid[j][0] + dp[j - 1][0];
+    }
+    for (let i = 1; i < m; i++) {
+        for (let j = 1; j < n; j++) {
+            dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+        }
+    }
+
+    return dp[m - 1][n - 1];
+};
+// 压缩状态 压缩列
+var minPathSum = function(grid) {
+    if (grid == null || grid.length == null || grid[0].length == null) return 0;
+    let m = grid.length, n = grid[0].length;
+    let dp = new Array(m).fill(0).map(item => new Array(n).fill(0));
+    // dp[j] = dp[i - 1][j];
+    // dp[j - 1] = dp[i][j - 1]
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (i == 0 && j == 0) {
+                dp[j] = grid[i][j]
+            }
+            else if (j == 0) {
+                dp[j] = dp[j] + grid[i][j];
+            }
+            else if (i == 0) {
+                dp[j] = dp[j - 1] + grid[i][j];
+            } else {
+                dp[j] = Math.min(dp[j], dp[j - 1]) + grid[i][j];
+            }
+            
+        }
+    }
+    return dp[n - 1];
+};
+```
+
