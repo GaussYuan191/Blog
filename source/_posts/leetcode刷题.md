@@ -8,11 +8,7 @@ tags:
 mathjax: false
 abbrlink: 35458
 date: 2021-09-10 21:42:49
-<<<<<<< HEAD
 updated: 2022-1-2 21:42:49
-=======
-updated: 2021-09-10 21:42:49
->>>>>>> c728d66bef1038018a91f5229f0ef8f72309e64f
 ---
 
 本篇博客记录每天刷题的记录，每天更新(已更新第十天)。
@@ -939,7 +935,6 @@ var letterCombinations = function(digits) {
 };
 ```
 
-<<<<<<< HEAD
 ### 十七天
 
 #### [最长重复子数组](https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/)
@@ -1428,5 +1423,57 @@ var minPathSum = function(grid) {
 };
 ```
 
-=======
->>>>>>> c728d66bef1038018a91f5229f0ef8f72309e64f
+# 二十三天
+
+#### [翻转字符串里的单词](https://leetcode-cn.com/problems/reverse-words-in-a-string/)
+
+给你一个字符串 s ，逐个翻转字符串中的所有 单词 。
+
+单词 是由非空格字符组成的字符串。s 中使用至少一个空格将字符串中的 单词 分隔开。
+
+请你返回一个翻转 s 中单词顺序并用单个空格相连的字符串。
+
+说明：
+
+输入字符串 s 可以在前面、后面或者单词间包含多余的空格。
+翻转后单词间应当仅用一个空格分隔。
+翻转后的字符串中不应包含额外的空格。
+
+**示例：**
+
+```js
+输入：s = "the sky is blue"
+输出："blue is sky the"
+输入：s = "  hello world  "
+输出："world hello"
+解释：输入字符串可以在前面或者后面包含多余的空格，但是翻转后的字符不能包括。
+```
+
+```js
+// 利用api trim去除字符串两端的空格， split以一个或多个空格(\s)分隔， reverse()反转， join(" ") 
+// 以空格分开
+var reverseWords = function(s) {
+    return s.trim().split(/\s+/).reverse().join(" ")
+};
+// 利用双端队列 找出单词，然后连接
+var reverseWords = function(s) {
+    let left = 0, right = s.length - 1;
+  let ans = [], word = ""
+  while (s.charAt(left) == " ") left++;
+  while (s.charAt(right) == " ") right--;
+  while (left <= right) {
+    let char = s.charAt(left);
+    if (char == " " && word) {
+      ans.unshift(word);
+      word = ""
+    } else if (char != " ") {
+      word += char;
+    }
+    left++;
+  }
+  ans.unshift(word)
+  return ans.join(" ");
+};
+
+```
+
