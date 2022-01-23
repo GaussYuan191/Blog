@@ -1483,4 +1483,131 @@ var reverseWords = function(s) {
 
 给你二叉树的根节点 `root` ，返回其节点值的 **锯齿形层序遍历** 。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
 
+**示例**
+
 ![](/gallery/zigzagLevelOrder.png)
+
+```
+输入：root = [3,9,20,null,null,15,7]
+输出：[[3],[20,9],[15,7]]
+```
+
+```js
+// 层次遍历， 如果是奇数次，则往前插入数据，偶数则往尾部插入
+var zigzagLevelOrder = function(root) {
+    if (root == null) return [];
+    let res = [], queue = [], times = 0;
+    queue.push(root);
+    let bfs = (root) => {
+        while (queue.length) {
+            let arr = [];
+            let len = queue.length
+            for (let i = 0; i < len; i++) {
+                let node = queue.shift();
+                node.left && queue.push(node.left)
+                node.right && queue.push(node.right)
+                if (times & 1 == 1) {
+                    arr.unshift(node.val)
+                } else {
+                    arr.push(node.val);  
+                }
+                           
+            }
+            res.push(arr);
+            times++;          
+        }
+    }
+    bfs(root);
+    return res;
+
+};
+```
+
+# 二十五天
+
+#### [两个数组的交集](https://leetcode-cn.com/problems/intersection-of-two-arrays/)
+
+给定两个数组，编写一个函数来计算它们的交集。
+
+**示例**
+
+```js
+输入：nums1 = [1,2,2,1], nums2 = [2,2]
+输出：[2]
+输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+输出：[9,4]
+```
+
+```js
+// 利用set去重， 从数量少的集合中找， 时间复杂度O(n + m),使用set存数据的时间复杂度为O(n + m),查找）O(min(m, n));
+var intersection = function(nums1, nums2) {
+    let set1 = new Set(nums1);
+    let set2 = new Set(nums2);
+    const dealResult = (set1, set2) => {
+        let ans = [];
+        for (let s of set1) {
+            if (set2.has(s)) {
+                ans.push(s);
+            }
+        }
+        return ans;
+    }
+    return set1.size > set2.size ? dealResult(set2, set1) : dealResult(set1, set2);
+};
+// 双指针，时间复杂度O(mlogm + nlogn)
+var intersection = function(nums1, nums2) {
+    if (nums1 == null) return nums2;
+    if (nums2 == null) return nums1;
+    nums1.sort((a, b) => a - b);
+    nums2.sort((a, b) => a - b);
+    let i = 0, j = 0, res = [];
+    while (i < nums1.length && j < nums2.length) {
+        if (nums1[i] < nums2[j]) {
+            i++;
+        } else if (nums1[i] > nums2[j]) {
+            j++;
+        } else {
+            res.push(nums1[i]);
+            i++;
+            j++;
+        }
+    }
+    return Array.from(new Set(res));
+};
+```
+
+#### [旋转图像](https://leetcode-cn.com/problems/rotate-image/)
+
+给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+
+你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
+
+**示例**
+
+![](/gallery/rotate-image.png)
+
+```
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[[7,4,1],[8,5,2],[9,6,3]]
+```
+
+```js
+// 先上下翻转 在对角翻转
+var rotate = function(matrix) {
+    let n = matrix.length;
+    // 水平翻转
+    for (let i = 0; i < Math.floor(n / 2); i++) {
+        for (let j = 0; j < n; j++) {
+            [matrix[i][j], matrix[n - i - 1][j]] = [matrix[n - i - 1][j], matrix[i][j]];
+        }
+    }
+    // 对角线翻转
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < i; j++) {
+            [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
+        }
+    }
+    return matrix;
+};
+```
+
