@@ -103,6 +103,8 @@ componentDidMount()
 
 如果是通过网络请求获取的数据也应该放到这里请求。也可以在这里添加订阅，如果订阅了，请不要忘记在`componentWillUnmount()`里取消订阅
 
+![](/gallery/react-constructor-life.png)
+
 ## 组件更新
 
 **static getDerivedStateFromProps()**
@@ -138,6 +140,8 @@ componentDidUpdate(prevProps, prevState, snapshot)
 
 当组件更新后，可以在此处对DOM进行操作，如果你对更新的props进行了比较，也可以选择在此处进行网络请求。例如，当props未发生变化时，则不会执行网络请求。可以在这里使用setState(), 但它必需被包裹在一个条件语句里，否则还会导死循环,它还会导致额外的重新渲染，影响组件性能，不要将props镜像给state
 
+![](/gallery/react-update-life.png)
+
 ## 组件卸载
 
 ### componentWillUnmount()
@@ -147,3 +151,36 @@ componentWillUnmount()
 ```
 
 `componentWillUnmount()`会在组件卸载及销毁之前直接调用。在此方法中执行必要的清理操作，例如，清除timer、网络请求、订阅，不能调用setState(),因为不会重新渲染。
+
+![](/gallery/react-willUnmount-life.png)
+
+# 同时渲染的父子组件
+
+## 组件挂载
+
+![](/gallery/react-p-constructor-life.png)
+
+## 父组件更新
+
+![](/gallery/react-p-update-life.png)
+
+## 组件卸载
+
+![](/gallery/react-p-willUnmount-life.png)
+
+**注意，先是显示要渲染的组件，当组件调用render方法时，上个组件才到卸载的生命周期**
+
+# 不同时渲染的父子组件
+
+该场景中，通过父组件的点击modal来控制子组件显示
+
+## 组件挂载
+
+![](/gallery/react-a-constructor-life.png)
+
+# 在父组件挂载的时候，请求数据
+
+![](/gallery/react-axios-constructor-life.png)
+
+最后附上本文的代码：[代码](https://github.com/GaussYuan191/react-life)
+
