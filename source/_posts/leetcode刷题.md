@@ -1611,3 +1611,134 @@ var rotate = function(matrix) {
 };
 ```
 
+# 二十六天
+
+#### [54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)
+
+给定一棵二叉搜索树，请找出其中第 `k` 大的节点的值。
+
+**示例 1:**
+
+```js
+输入: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+输出: 4
+输入: root = [5,3,6,2,4,null,null,1], k = 3
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+输出: 4
+```
+
+```js
+// 易知，二叉排序树的中序遍历是从小到到大已经排好序的
+// 递归 逆中序遍历， 先遍历右节点再遍历根节点，最后遍历左节点
+// O(n) O(n)
+var kthLargest = function(root, k) {
+    let res = 0;
+    const dfs = (node) => {
+        if (node === null) return;
+        dfs(node.right) 
+        if (--k  === 0 ) {
+            res = node.val;
+            return;
+        }
+        dfs(node.left);
+    }
+    dfs(root);
+    return res;
+};
+// 莫里斯遍历，其实就是树形结构的扁平化，逆莫里斯遍历就能得到答案了
+// 正序莫里斯遍历
+let res = []
+const morris = (root) => {
+    if (root === null) return;
+    // 先判断该节点有没有左儿子
+    while (root) {
+        if (root.left) {
+            //如果有，就找左儿子的最右边的孩子pre，其实就是中序遍历该节点的前一个节点
+            let pre = root.left;
+            // 注意这里该节点的右节点不能指向自己
+            while (pre.right && pre.right != root) {
+                pre = pre.right;
+            }  
+            // 再看pre有没有右孩子
+            if (pre.right == null) {
+                //如果没有，则pre的right指向root, root指向root的左孩子
+                pre.right == root;
+                root = root.left;
+            } else {
+                // 如果有，就说明，这个节点之前已经遍历过了，它的左边已经遍历完了，pre的right设为null
+                // 此时root就是我们要找的元素， root向右移动
+                pre.right = null;
+                // 这里处理结果
+                // 例如
+                res.push(root.val);
+                root = root.right;
+            }
+            
+        } else {
+            // 没有，此时root元素就是我们要找的元素，root向右移动
+            // 处理结果
+            res.push(root.val)
+            root = root.right;
+        }
+    }
+    // res中保留着中序遍历的结果
+    return res;
+}
+// 逆莫里斯遍历
+const morris = (node) => {
+       while (node) {
+
+            if (node.right) {
+                let pre = node.right;
+                // 找左儿子的最右端
+                while (pre.left && pre.left != node) {
+                    pre = pre.left;
+                }
+                if (pre.left == null) {
+                    pre.left = node;
+                    node = node.right;
+                } else {
+                    pre.left = null;
+                    k--;
+                    node = node.left;
+                }
+            } else {
+                node = node.left;
+                k--;
+            }
+            if (k === 0) {
+                res = node.val;
+                return;
+            }
+        }
+
+
+}
+// 利用栈实现迭代遍历
+if (root === null) return;
+let stack = [];
+let ans = [];
+while (root || stack.length != 0) {
+    // 左节点
+    while (root) {
+        stack.push(root);
+        root = root.left;
+    }
+    root = stack.pop()
+    // 根节点
+    ans.push(root.val);
+    root = root.right;
+}	
+```
+
