@@ -20,6 +20,15 @@
   </url>
   
   <url>
+    <loc>http://yuangauss.xyz/posts/13229/</loc>
+    
+    <lastmod>2022-01-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://yuangauss.xyz/posts/6872/</loc>
     
     <lastmod>2022-01-14</lastmod>
@@ -783,6 +792,13 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>http://yuangauss.xyz/tags/%E5%B0%8F%E7%BB%93/</loc>
+    <lastmod>2022-02-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -955,6 +971,13 @@
   
   <url>
     <loc>http://yuangauss.xyz/categories/%E7%BB%A7%E6%89%BF/</loc>
+    <lastmod>2022-02-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://yuangauss.xyz/categories/ES6/</loc>
     <lastmod>2022-02-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
