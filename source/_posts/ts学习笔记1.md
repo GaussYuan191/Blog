@@ -5,6 +5,7 @@ categories:
 tags:
   - 学习笔记
 mathjax: false
+abbrlink: 61000
 date: 2022-09-07 21:07:54
 updated: 2022-09-07 21:07:54
 ---
@@ -106,4 +107,111 @@ enum ENUM {
 
 ### 数字(number)
 
-和JavaScript一样，TypeScirpt里所有的数字都是浮点数
+和JavaScript一样，TypeScirpt里所有的数字都是浮点数，`0b1010`和`0o744`在ES6中会被编译成十进制数字
+
+```js
+let decLiteral: number = 6;
+let hexLiteral: number = 0o744
+```
+
+#### 元组
+
+
+
+
+
+### 字符串(string)
+
+使用`string`定义字符串类型：
+
+```js
+let myName: string = 'Tom'
+let sentence: string = `Hello, my name is ${myName}`
+```
+
+### 空值(void)
+
+JavaScript没有空值（Void）的概念，在TypeScript中，可以用`void`表示没有任何返回值的函数
+
+```js
+function alterName(): void {
+    alter('My name is Tom');
+}
+```
+
+### Null和Undefined
+
+与`void `的区别是，`undefined`和`null`是所有类型的子类型。也就是说`undefined`类型的变量，可以赋值给`number`
+
+类型的变量，而`void`类型的变量不能赋值给`number`类型的变量
+
+```js
+let u:undefined;
+let num: number = u;
+let u:void;
+let num:number = u 
+// Type 'void' is not assignable to type 'number'.
+```
+
+### any和unknown、never
+
+1.`any`绕过所有类型检查 => 类型检测和编译筛查功能全部取消。2.`unknown` 绕过赋值检查 => 禁止更改传递
+
+#### Object / ObjectConstructor / {}
+
+`Object` -> Object.prototype 上的属性，`ObjectConstructor`->定义了Object本身的属性, `{}`-定义空属性
+
+## 接口(interface)
+
+他是对行为的一种抽象，具体行动由类去实现
+
+```tsx
+interface Person {
+    readonly id: number;  //只读
+    name: string,
+    age?: number， // 可选
+    [propName: string]: any //任意
+}
+let tom:Person = {
+    name: 'Tom',
+    age: 25
+}
+```
+
+### 交叉类型
+
+```tsx
+interface A {
+  x: D;
+}
+interface B {
+  x: E;
+}
+interface C {
+  x: F;
+}
+interface D {
+  d: boolean;
+}
+interface E {
+  e: string;
+}
+interface F {
+  f: number;
+}
+type ABC = A & B & C;
+let abc: ABC = {
+  x: {
+    d: false,
+    e: "class",
+    f: 5,
+  },
+};
+```
+
+合并冲突
+
+```
+
+```
+
